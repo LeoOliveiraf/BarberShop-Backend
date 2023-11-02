@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BarberShop.Data.DTO.AgendamentoInputModelBarbearia
 {
-    public class AgendamentoCreate
+    public class AgendamentoPost
     {
         public DateTime Data { get; set; }
         public int TipoServicoId { get; set; }

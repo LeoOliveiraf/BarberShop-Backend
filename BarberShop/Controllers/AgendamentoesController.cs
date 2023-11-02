@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using BarberShop.Data;
 using BarberShop.Model;
 using BarberShop.Data.DTO.AgendamentoInputModelBarbearia;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace BarberShop.Controllers
 {
@@ -22,16 +23,44 @@ namespace BarberShop.Controllers
             _context = context;
         }
 
-        // GET: api/Agendamentoes
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Agendamento>>> GetAgendamentos()
+
+        // GET conforme o figma
+        [HttpGet("listaAgendamento")]
+        public async Task<ActionResult<IEnumerable<AgendamentoGet>>> GetAgendamentos()
         {
-          if (_context.Agendamentos == null)
-          {
-              return NotFound();
-          }
-            return await _context.Agendamentos.ToListAsync();
+            var agendamento = await _context.Agendamentos.ToListAsync();
+
+            if (_context.Agendamentos == null)
+            {
+                return NotFound();
+            }
+
+            List<AgendamentoGet> listaAgendamento = new List<AgendamentoGet>();
+
+            foreach (var item in agendamento)
+            {
+                TipoServico servico = await _context.TipoServicos.FindAsync(item.TipoServicoId);
+                Cliente cliente = await _context.Clientes.FindAsync(item.ClienteId);
+                AgendamentoGet agendamentoGet = new AgendamentoGet();
+                agendamentoGet.Data = item.Data;
+                agendamentoGet.TipoServicoNome = servico.Nome;
+                agendamentoGet.ClienteNome = cliente.Nome;
+                listaAgendamento.Add(agendamentoGet);
+            }
+
+            return listaAgendamento;
         }
+
+        /*GET: api/Agendamentoes
+            [HttpGet]
+            public async Task<ActionResult<IEnumerable<Agendamento>>> GetAgendamentos()
+            {
+              if (_context.Agendamentos == null)
+              {
+                  return NotFound();
+              }
+                return await _context.Agendamentos.ToListAsync();
+        }*/
 
         // GET: api/Agendamentoes/5
         [HttpGet("{id}")]
@@ -84,7 +113,7 @@ namespace BarberShop.Controllers
 
         // POST: api/Agendamentoes
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
+        /*[HttpPost]
         public async Task<ActionResult<Agendamento>> PostAgendamento(Agendamento agendamento)
         {
           if (_context.Agendamentos == null)
@@ -95,9 +124,12 @@ namespace BarberShop.Controllers
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetAgendamento", new { id = agendamento.Id }, agendamento);
-        }
+        }*/
+
+
+        // POST
         [HttpPost("createAgendamento")]
-        public async Task<ActionResult> PostAgendamento(AgendamentoCreate model)
+        public async Task<ActionResult> PostAgendamento(AgendamentoPost model)
         {
             if (_context.Agendamentos == null)
             {
@@ -113,9 +145,8 @@ namespace BarberShop.Controllers
                 TipoServico = await _context.TipoServicos.FindAsync(model.TipoServicoId),
                 Barbearia = await _context.Barbearias.FindAsync(model.BarbeariaId)
             };
-                _context.Agendamentos.Add(agendamento);
-                await _context.SaveChangesAsync();
-
+            _context.Agendamentos.Add(agendamento);
+            await _context.SaveChangesAsync();
             return CreatedAtAction("GetAgendamento", new { id = agendamento.Id }, agendamento);
         }
 

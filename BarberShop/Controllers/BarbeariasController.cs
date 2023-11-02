@@ -109,12 +109,10 @@ namespace BarberShop.Controllers
                 Telefone = model.Telefone,
                 AdministradorId = model.AdministradorId,
                 Administrador = await _context.Administradores.FindAsync(model.AdministradorId)
-       
-
             };
-                _context.Barbearias.Add(barbearia);
-                await _context.SaveChangesAsync();
-                return CreatedAtAction("GetBarbearia", new { id = barbearia.Id }, barbearia);
+            _context.Barbearias.Add(barbearia);
+            await _context.SaveChangesAsync();
+            return CreatedAtAction("GetBarbearia", new { id = barbearia.Id }, barbearia);
         }
         // DELETE: api/Barbearias/5
         [HttpDelete("{id}")]
