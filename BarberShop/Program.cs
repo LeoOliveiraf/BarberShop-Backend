@@ -4,9 +4,20 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-var connectionStringMySql = builder.Configuration.GetConnectionString("ConnectionMySql");
+var connectionStringPgSql = builder.Configuration.GetConnectionString("PostgreConn");
 
-builder.Services.AddDbContext<BarberShopDbContext>(x => x.UseMySQL(connectionStringMySql));
+builder.Services.AddDbContext<BarberShopDbContext>(x => x.UseNpgsql(connectionStringPgSql));
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAnyOrigin",
+        builder =>
+        {
+            builder.WithOrigins()
+                   .AllowAnyHeader()
+                   .AllowAnyMethod();
+        });
+});
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -14,7 +25,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
-
+app.UseCors("AllowAnyOrigin");
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
