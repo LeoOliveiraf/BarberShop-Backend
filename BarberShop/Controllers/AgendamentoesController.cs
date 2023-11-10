@@ -42,6 +42,7 @@ namespace BarberShop.Controllers
                 TipoServico servico = await _context.TipoServicos.FindAsync(item.TipoServicoId);
                 Cliente cliente = await _context.Clientes.FindAsync(item.ClienteId);
                 AgendamentoGet agendamentoGet = new AgendamentoGet();
+                agendamentoGet.Id = item.Id;
                 agendamentoGet.Data = item.Data;
                 agendamentoGet.TipoServicoNome = servico.Nome;
                 agendamentoGet.ClienteNome = cliente.Nome;
