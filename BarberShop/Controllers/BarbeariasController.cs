@@ -63,13 +63,11 @@ namespace BarberShop.Controllers
 
             var barbearia = new Barbearia
             {
-                Id = barbeariaCreate.Id,
                 Endereco = barbeariaCreate.Endereco,
                 Telefone = barbeariaCreate.Telefone,
-                AdministradorId = barbeariaCreate.AdministradorId
+                AdministradorId = barbeariaCreate.AdministradorId,
+                Administrador = await _context.Administradores.FindAsync(barbeariaCreate.AdministradorId)
             };
-
-            barbearia.Administrador = null;
 
             _context.Entry(barbearia).State = EntityState.Modified;
 
