@@ -16,7 +16,7 @@ namespace BarberShop.Model
         [Required]
         public string Telefone { get; set; }
         [JsonIgnore]
-        public Administrador Administrador { get; set; }
+        public Administrador? Administrador { get; set; }
         [Required]
         public int AdministradorId { get; set; }
         [JsonIgnore]
