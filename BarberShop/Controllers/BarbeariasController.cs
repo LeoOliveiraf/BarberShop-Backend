@@ -54,15 +54,23 @@ namespace BarberShop.Controllers
         // PUT: api/Barbearias/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutBarbearia(int id, Barbearia barbearia)
+        public async Task<IActionResult> PutBarbearia(int id, BarbeariaCreate barbeariaCreate)
         {
-            if (id != barbearia.Id)
+            if (id != barbeariaCreate.Id)
             {
                 return BadRequest();
             }
-
+        
+            var barbearia = new Barbearia
+            {
+                Id = barbeariaCreate.Id,
+                Endereco = barbeariaCreate.Endereco,
+                Telefone = barbeariaCreate.Telefone,
+                AdministradorId = barbeariaCreate.AdministradorId
+            };
+        
             _context.Entry(barbearia).State = EntityState.Modified;
-
+        
             try
             {
                 await _context.SaveChangesAsync();
@@ -78,7 +86,7 @@ namespace BarberShop.Controllers
                     throw;
                 }
             }
-
+        
             return NoContent();
         }
 
