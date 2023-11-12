@@ -60,7 +60,7 @@ namespace BarberShop.Controllers
             {
                 return BadRequest();
             }
-        
+
             var barbearia = new Barbearia
             {
                 Id = barbeariaCreate.Id,
@@ -68,9 +68,11 @@ namespace BarberShop.Controllers
                 Telefone = barbeariaCreate.Telefone,
                 AdministradorId = barbeariaCreate.AdministradorId
             };
-        
+
+            barbearia.Administrador = null;
+
             _context.Entry(barbearia).State = EntityState.Modified;
-        
+
             try
             {
                 await _context.SaveChangesAsync();
@@ -86,7 +88,7 @@ namespace BarberShop.Controllers
                     throw;
                 }
             }
-        
+
             return NoContent();
         }
 
