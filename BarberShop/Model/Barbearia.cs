@@ -15,7 +15,6 @@ namespace BarberShop.Model
         public string Endereco { get; set; }
         [Required]
         public string Telefone { get; set; }
-        [ForeignKey("AdministradorId")]
         [JsonIgnore]
         public Administrador? Administrador { get; set; }
         [Required]
