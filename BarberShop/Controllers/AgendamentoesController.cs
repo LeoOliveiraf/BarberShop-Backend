@@ -90,7 +90,8 @@ namespace BarberShop.Controllers
             {
                 return BadRequest();
             }
-
+            agendamento.Cliente = await _context.Clientes.FindAsync(agendamento.ClienteId);
+            agendamento.TipoServico = await _context.TipoServicos.FindAsync(agendamento.TipoServicoId);
             _context.Entry(agendamento).State = EntityState.Modified;
 
             try
