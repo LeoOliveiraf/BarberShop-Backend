@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using BarberShop.Data;
 using BarberShop.Model;
 using BarberShop.Data.DTO.BarbeariaInputModel;
+using BarberShop.Data.DTO.BarbeariaDTO;
 
 namespace BarberShop.Controllers
 {
@@ -54,16 +55,20 @@ namespace BarberShop.Controllers
         // PUT: api/Barbearias/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutBarbearia(int id, BarbeariaCreate barbeariaCreate)
+        public async Task<IActionResult> PutBarbearia(int id, BarbeariaPut barbeariaPut)
         {
-
+            if (id != barbeariaPut.Id)
+            {
+                return BadRequest();
+            }
 
             var barbearia = new Barbearia
             {
-                Endereco = barbeariaCreate.Endereco,
-                Telefone = barbeariaCreate.Telefone,
-                AdministradorId = barbeariaCreate.AdministradorId,
-                Administrador = await _context.Administradores.FindAsync(barbeariaCreate.AdministradorId)
+                Id = barbeariaPut.Id,
+                Endereco = barbeariaPut.Endereco,
+                Telefone = barbeariaPut.Telefone,
+                AdministradorId = barbeariaPut.AdministradorId,
+                Administrador = await _context.Administradores.FindAsync(barbeariaPut.AdministradorId)
             };
 
             _context.Entry(barbearia).State = EntityState.Modified;

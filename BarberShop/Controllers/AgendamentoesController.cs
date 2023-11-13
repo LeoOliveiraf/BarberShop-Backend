@@ -9,6 +9,8 @@ using BarberShop.Data;
 using BarberShop.Model;
 using BarberShop.Data.DTO.AgendamentoInputModelBarbearia;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using BarberShop.Data.DTO.AgendamentoDTO;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace BarberShop.Controllers
 {
@@ -84,14 +86,24 @@ namespace BarberShop.Controllers
         // PUT: api/Agendamentoes/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAgendamento(int id, Agendamento agendamento)
+        public async Task<IActionResult> PutAgendamento(int id, AgendamentoPut model)
         {
-            if (id != agendamento.Id)
+            if (id != model.Id)
             {
                 return BadRequest();
             }
-            agendamento.Cliente = await _context.Clientes.FindAsync(agendamento.ClienteId);
-            agendamento.TipoServico = await _context.TipoServicos.FindAsync(agendamento.TipoServicoId);
+
+            var agendamento = new Agendamento
+            {
+                Id = model.Id,
+                Data = model.Data,
+                TipoServicoId = model.TipoServicoId,
+                ClienteId = model.ClienteId,
+                BarbeariaId = model.BarbeariaId,
+                Cliente = await _context.Clientes.FindAsync(model.ClienteId),
+                TipoServico = await _context.TipoServicos.FindAsync(model.TipoServicoId),
+                Barbearia = await _context.Barbearias.FindAsync(model.BarbeariaId)
+            };
             _context.Entry(agendamento).State = EntityState.Modified;
 
             try
