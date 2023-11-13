@@ -56,10 +56,7 @@ namespace BarberShop.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutBarbearia(int id, BarbeariaCreate barbeariaCreate)
         {
-            if (id != barbeariaCreate.Id)
-            {
-                return BadRequest();
-            }
+
 
             var barbearia = new Barbearia
             {
